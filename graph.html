@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 600px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "pittsburgh", "label": "pittsburgh", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "steeler", "label": "steeler", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "new", "label": "new", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "lose", "label": "lose", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "trade", "label": "trade", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "also", "label": "also", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "chicago", "label": "chicago", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "incumb", "label": "incumb", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "pick", "label": "pick", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "bear", "label": "bear", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "take", "label": "take", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "although", "label": "although", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "first", "label": "first", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "decid", "label": "decid", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "quarterback", "label": "quarterback", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "starter", "label": "starter", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "improv", "label": "improv", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "organis", "label": "organis", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "justin", "label": "justin", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "field", "label": "field", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "among", "label": "among", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "roster", "label": "roster", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "let", "label": "let", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "day", "label": "day", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "show", "label": "show", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "set", "label": "set", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "lean", "label": "lean", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "could", "label": "could", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "ad", "label": "ad", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "sign", "label": "sign", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "way", "label": "way", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "former", "label": "former", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "super", "label": "super", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "bowl", "label": "bowl", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "winner", "label": "winner", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "russel", "label": "russel", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "leav", "label": "leav", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "denver", "label": "denver", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "wilson", "label": "wilson", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "futur", "label": "futur", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "sinc", "label": "sinc", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "kenni", "label": "kenni", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "pickett", "label": "pickett", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "philadelphia", "label": "philadelphia", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "mitchel", "label": "mitchel", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "suffer", "label": "suffer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "brought", "label": "brought", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "draft", "label": "draft", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "kept", "label": "kept", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "includ", "label": "includ", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "class", "label": "class", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "readi", "label": "readi", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "last", "label": "last", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "carolina", "label": "carolina", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "year", "label": "year", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "second", "label": "second", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "next", "label": "next", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "chapter", "label": "chapter", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "said", "label": "said", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "extern", "label": "extern", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "ca", "label": "ca", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "say", "label": "say", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "thank", "label": "thank", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "enough", "label": "enough", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "entir", "label": "entir", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "brother", "label": "brother", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "citi", "label": "citi", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "embrac", "label": "embrac", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "mobil", "label": "mobil", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "flash", "label": "flash", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "athletic", "label": "athletic", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "two", "label": "two", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "overal", "label": "overal", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "round", "label": "round", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "turn", "label": "turn", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "coach", "label": "coach", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "question", "label": "question", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "whether", "label": "whether", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "reli", "label": "reli", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "much", "label": "much", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "leg", "label": "leg", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "escap", "label": "escap", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "three", "label": "three", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "win", "label": "win", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "season", "label": "season", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "faith", "label": "faith", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "panther", "label": "panther", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "receiv", "label": "receiv", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "finish", "label": "finish", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "dj", "label": "dj", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "moor", "label": "moor", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "sever", "label": "sever", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "nfl", "label": "nfl", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "overhaul", "label": "overhaul", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "start", "label": "start", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "worst", "label": "worst", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "cousin", "label": "cousin", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "mvp", "label": "mvp", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "jone", "label": "jone", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "henri", "label": "henri", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "biggest", "label": "biggest", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "prospect", "label": "prospect", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "dealsth", "label": "dealsth", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "record", "label": "record", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "pass", "label": "pass", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "game", "label": "game", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "throw", "label": "throw", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "yard", "label": "yard", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "touchdown", "label": "touchdown", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "almost", "label": "almost", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "rush", "label": "rush", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "halv", "label": "halv", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "time", "label": "time", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "especi", "label": "especi", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "move", "label": "move", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "ownership", "label": "ownership", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "allow", "label": "allow", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "opportun", "label": "opportun", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "part", "label": "part", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "histor", "label": "histor", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "franchis", "label": "franchis", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "play", "label": "play", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "reason", "label": "reason", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "attack", "label": "attack", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "wish", "label": "wish", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "one", "label": "one", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "noth", "label": "noth", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "success", "label": "success", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "mike", "label": "mike", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "tomlin", "label": "tomlin", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "knock", "label": "knock", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "free", "label": "free", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "well", "label": "well", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "bring", "label": "bring", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "go", "label": "go", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "trubiski", "label": "trubiski", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "buffalo", "label": "buffalo", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "bill", "label": "bill", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "mason", "label": "mason", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "rudolph", "label": "rudolph", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "tennesse", "label": "tennesse", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "titan", "label": "titan", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "ankl", "label": "ankl", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "injuri", "label": "injuri", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "american", "label": "american", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "footbal", "label": "footbal", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "alert", "label": "alert", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "bbc", "label": "bbc", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "sport", "label": "sport", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "app", "label": "app", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"arrows": "to", "from": "pittsburgh", "to": "steeler", "width": 1}, {"arrows": "to", "from": "pittsburgh", "to": "new", "width": 1}, {"arrows": "to", "from": "pittsburgh", "to": "lose", "width": 1}, {"arrows": "to", "from": "steeler", "to": "trade", "width": 1}, {"arrows": "to", "from": "steeler", "to": "also", "width": 1}, {"arrows": "to", "from": "trade", "to": "chicago", "width": 1}, {"arrows": "to", "from": "trade", "to": "incumb", "width": 1}, {"arrows": "to", "from": "trade", "to": "pick", "width": 1}, {"arrows": "to", "from": "chicago", "to": "bear", "width": 1}, {"arrows": "to", "from": "chicago", "to": "take", "width": 1}, {"arrows": "to", "from": "chicago", "to": "although", "width": 1}, {"arrows": "to", "from": "chicago", "to": "first", "width": 1}, {"arrows": "to", "from": "chicago", "to": "decid", "width": 1}, {"arrows": "to", "from": "bear", "to": "quarterback", "width": 2}, {"arrows": "to", "from": "bear", "to": "starter", "width": 1}, {"arrows": "to", "from": "bear", "to": "improv", "width": 1}, {"arrows": "to", "from": "bear", "to": "organis", "width": 1}, {"arrows": "to", "from": "quarterback", "to": "justin", "width": 2}, {"arrows": "to", "from": "quarterback", "to": "field", "width": 1}, {"arrows": "to", "from": "quarterback", "to": "among", "width": 1}, {"arrows": "to", "from": "quarterback", "to": "roster", "width": 1}, {"arrows": "to", "from": "quarterback", "to": "let", "width": 1}, {"arrows": "to", "from": "justin", "to": "field", "width": 2}, {"arrows": "to", "from": "field", "to": "day", "width": 1}, {"arrows": "to", "from": "field", "to": "bear", "width": 1}, {"arrows": "to", "from": "field", "to": "show", "width": 1}, {"arrows": "to", "from": "field", "to": "trade", "width": 1}, {"arrows": "to", "from": "field", "to": "set", "width": 1}, {"arrows": "to", "from": "field", "to": "lean", "width": 1}, {"arrows": "to", "from": "field", "to": "could", "width": 1}, {"arrows": "to", "from": "field", "to": "ad", "width": 1}, {"arrows": "to", "from": "day", "to": "sign", "width": 1}, {"arrows": "to", "from": "day", "to": "way", "width": 1}, {"arrows": "to", "from": "sign", "to": "former", "width": 1}, {"arrows": "to", "from": "former", "to": "super", "width": 1}, {"arrows": "to", "from": "super", "to": "bowl", "width": 1}, {"arrows": "to", "from": "bowl", "to": "winner", "width": 1}, {"arrows": "to", "from": "winner", "to": "russel", "width": 1}, {"arrows": "to", "from": "russel", "to": "leav", "width": 1}, {"arrows": "to", "from": "leav", "to": "denver", "width": 1}, {"arrows": "to", "from": "denver", "to": "wilson", "width": 1}, {"arrows": "to", "from": "wilson", "to": "set", "width": 1}, {"arrows": "to", "from": "set", "to": "pittsburgh", "width": 1}, {"arrows": "to", "from": "set", "to": "futur", "width": 1}, {"arrows": "to", "from": "new", "to": "starter", "width": 1}, {"arrows": "to", "from": "starter", "to": "trade", "width": 1}, {"arrows": "to", "from": "starter", "to": "sinc", "width": 1}, {"arrows": "to", "from": "incumb", "to": "kenni", "width": 1}, {"arrows": "to", "from": "kenni", "to": "pickett", "width": 1}, {"arrows": "to", "from": "pickett", "to": "philadelphia", "width": 1}, {"arrows": "to", "from": "pickett", "to": "mitchel", "width": 1}, {"arrows": "to", "from": "pickett", "to": "suffer", "width": 1}, {"arrows": "to", "from": "philadelphia", "to": "steeler", "width": 1}, {"arrows": "to", "from": "also", "to": "brought", "width": 1}, {"arrows": "to", "from": "brought", "to": "field", "width": 1}, {"arrows": "to", "from": "sinc", "to": "draft", "width": 1}, {"arrows": "to", "from": "draft", "to": "pick", "width": 1}, {"arrows": "to", "from": "draft", "to": "kept", "width": 1}, {"arrows": "to", "from": "draft", "to": "includ", "width": 1}, {"arrows": "to", "from": "draft", "to": "class", "width": 1}, {"arrows": "to", "from": "pick", "to": "readi", "width": 1}, {"arrows": "to", "from": "pick", "to": "last", "width": 1}, {"arrows": "to", "from": "pick", "to": "carolina", "width": 1}, {"arrows": "to", "from": "pick", "to": "year", "width": 1}, {"arrows": "to", "from": "pick", "to": "second", "width": 1}, {"arrows": "to", "from": "readi", "to": "next", "width": 1}, {"arrows": "to", "from": "next", "to": "chapter", "width": 1}, {"arrows": "to", "from": "chapter", "to": "said", "width": 1}, {"arrows": "to", "from": "said", "to": "extern", "width": 1}, {"arrows": "to", "from": "extern", "to": "ca", "width": 1}, {"arrows": "to", "from": "ca", "to": "say", "width": 1}, {"arrows": "to", "from": "say", "to": "thank", "width": 1}, {"arrows": "to", "from": "thank", "to": "enough", "width": 1}, {"arrows": "to", "from": "thank", "to": "entir", "width": 1}, {"arrows": "to", "from": "thank", "to": "brother", "width": 1}, {"arrows": "to", "from": "enough", "to": "citi", "width": 1}, {"arrows": "to", "from": "citi", "to": "chicago", "width": 1}, {"arrows": "to", "from": "take", "to": "embrac", "width": 1}, {"arrows": "to", "from": "embrac", "to": "mobil", "width": 1}, {"arrows": "to", "from": "mobil", "to": "quarterback", "width": 1}, {"arrows": "to", "from": "show", "to": "flash", "width": 1}, {"arrows": "to", "from": "flash", "to": "athletic", "width": 1}, {"arrows": "to", "from": "athletic", "to": "first", "width": 1}, {"arrows": "to", "from": "first", "to": "two", "width": 1}, {"arrows": "to", "from": "first", "to": "pick", "width": 1}, {"arrows": "to", "from": "first", "to": "overal", "width": 2}, {"arrows": "to", "from": "first", "to": "round", "width": 1}, {"arrows": "to", "from": "two", "to": "year", "width": 1}, {"arrows": "to", "from": "two", "to": "last", "width": 1}, {"arrows": "to", "from": "year", "to": "chicago", "width": 1}, {"arrows": "to", "from": "year", "to": "draft", "width": 2}, {"arrows": "to", "from": "year", "to": "turn", "width": 1}, {"arrows": "to", "from": "year", "to": "coach", "width": 1}, {"arrows": "to", "from": "although", "to": "question", "width": 1}, {"arrows": "to", "from": "question", "to": "whether", "width": 1}, {"arrows": "to", "from": "whether", "to": "reli", "width": 1}, {"arrows": "to", "from": "reli", "to": "much", "width": 1}, {"arrows": "to", "from": "much", "to": "leg", "width": 1}, {"arrows": "to", "from": "leg", "to": "escap", "width": 1}, {"arrows": "to", "from": "escap", "to": "three", "width": 1}, {"arrows": "to", "from": "three", "to": "win", "width": 1}, {"arrows": "to", "from": "win", "to": "chicago", "width": 1}, {"arrows": "to", "from": "last", "to": "year", "width": 1}, {"arrows": "to", "from": "last", "to": "season", "width": 3}, {"arrows": "to", "from": "kept", "to": "faith", "width": 1}, {"arrows": "to", "from": "faith", "to": "field", "width": 1}, {"arrows": "to", "from": "carolina", "to": "panther", "width": 1}, {"arrows": "to", "from": "panther", "to": "receiv", "width": 1}, {"arrows": "to", "from": "panther", "to": "finish", "width": 1}, {"arrows": "to", "from": "receiv", "to": "dj", "width": 1}, {"arrows": "to", "from": "dj", "to": "moor", "width": 1}, {"arrows": "to", "from": "moor", "to": "sever", "width": 1}, {"arrows": "to", "from": "sever", "to": "draft", "width": 1}, {"arrows": "to", "from": "sever", "to": "quarterback", "width": 1}, {"arrows": "to", "from": "includ", "to": "carolina", "width": 1}, {"arrows": "to", "from": "turn", "to": "first", "width": 1}, {"arrows": "to", "from": "overal", "to": "panther", "width": 1}, {"arrows": "to", "from": "overal", "to": "pick", "width": 1}, {"arrows": "to", "from": "finish", "to": "last", "width": 1}, {"arrows": "to", "from": "season", "to": "nfl", "width": 1}, {"arrows": "to", "from": "season", "to": "year", "width": 1}, {"arrows": "to", "from": "season", "to": "overhaul", "width": 1}, {"arrows": "to", "from": "season", "to": "start", "width": 1}, {"arrows": "to", "from": "nfl", "to": "worst", "width": 1}, {"arrows": "to", "from": "nfl", "to": "cousin", "width": 1}, {"arrows": "to", "from": "worst", "to": "bear", "width": 1}, {"arrows": "to", "from": "futur", "to": "mvp", "width": 1}, {"arrows": "to", "from": "mvp", "to": "nfl", "width": 1}, {"arrows": "to", "from": "cousin", "to": "jone", "width": 1}, {"arrows": "to", "from": "jone", "to": "henri", "width": 1}, {"arrows": "to", "from": "henri", "to": "among", "width": 1}, {"arrows": "to", "from": "among", "to": "biggest", "width": 1}, {"arrows": "to", "from": "among", "to": "prospect", "width": 1}, {"arrows": "to", "from": "biggest", "to": "dealsth", "width": 1}, {"arrows": "to", "from": "dealsth", "to": "bear", "width": 1}, {"arrows": "to", "from": "improv", "to": "record", "width": 1}, {"arrows": "to", "from": "record", "to": "field", "width": 1}, {"arrows": "to", "from": "lean", "to": "pass", "width": 1}, {"arrows": "to", "from": "pass", "to": "game", "width": 1}, {"arrows": "to", "from": "pass", "to": "first", "width": 1}, {"arrows": "to", "from": "game", "to": "throw", "width": 1}, {"arrows": "to", "from": "game", "to": "pickett", "width": 1}, {"arrows": "to", "from": "throw", "to": "yard", "width": 1}, {"arrows": "to", "from": "yard", "to": "touchdown", "width": 1}, {"arrows": "to", "from": "yard", "to": "almost", "width": 1}, {"arrows": "to", "from": "touchdown", "to": "rush", "width": 1}, {"arrows": "to", "from": "rush", "to": "yard", "width": 1}, {"arrows": "to", "from": "almost", "to": "halv", "width": 1}, {"arrows": "to", "from": "halv", "to": "time", "width": 1}, {"arrows": "to", "from": "time", "to": "chicago", "width": 1}, {"arrows": "to", "from": "time", "to": "especi", "width": 1}, {"arrows": "to", "from": "decid", "to": "move", "width": 1}, {"arrows": "to", "from": "move", "to": "field", "width": 1}, {"arrows": "to", "from": "could", "to": "pass", "width": 1}, {"arrows": "to", "from": "second", "to": "time", "width": 1}, {"arrows": "to", "from": "especi", "to": "sever", "width": 1}, {"arrows": "to", "from": "prospect", "to": "year", "width": 1}, {"arrows": "to", "from": "class", "to": "thank", "width": 1}, {"arrows": "to", "from": "entir", "to": "bear", "width": 1}, {"arrows": "to", "from": "organis", "to": "ownership", "width": 1}, {"arrows": "to", "from": "ownership", "to": "allow", "width": 1}, {"arrows": "to", "from": "allow", "to": "opportun", "width": 1}, {"arrows": "to", "from": "opportun", "to": "part", "width": 1}, {"arrows": "to", "from": "part", "to": "histor", "width": 1}, {"arrows": "to", "from": "histor", "to": "franchis", "width": 1}, {"arrows": "to", "from": "franchis", "to": "field", "width": 1}, {"arrows": "to", "from": "ad", "to": "thank", "width": 1}, {"arrows": "to", "from": "brother", "to": "play", "width": 1}, {"arrows": "to", "from": "play", "to": "reason", "width": 1}, {"arrows": "to", "from": "reason", "to": "attack", "width": 1}, {"arrows": "to", "from": "attack", "to": "day", "width": 1}, {"arrows": "to", "from": "way", "to": "wish", "width": 1}, {"arrows": "to", "from": "wish", "to": "one", "width": 1}, {"arrows": "to", "from": "one", "to": "noth", "width": 1}, {"arrows": "to", "from": "noth", "to": "success", "width": 1}, {"arrows": "to", "from": "success", "to": "pittsburgh", "width": 1}, {"arrows": "to", "from": "lose", "to": "season", "width": 1}, {"arrows": "to", "from": "coach", "to": "mike", "width": 1}, {"arrows": "to", "from": "mike", "to": "tomlin", "width": 1}, {"arrows": "to", "from": "tomlin", "to": "knock", "width": 1}, {"arrows": "to", "from": "knock", "to": "first", "width": 1}, {"arrows": "to", "from": "round", "to": "last", "width": 1}, {"arrows": "to", "from": "overhaul", "to": "quarterback", "width": 1}, {"arrows": "to", "from": "roster", "to": "free", "width": 1}, {"arrows": "to", "from": "free", "to": "well", "width": 1}, {"arrows": "to", "from": "well", "to": "bring", "width": 1}, {"arrows": "to", "from": "bring", "to": "two", "width": 1}, {"arrows": "to", "from": "start", "to": "quarterback", "width": 1}, {"arrows": "to", "from": "start", "to": "game", "width": 1}, {"arrows": "to", "from": "let", "to": "go", "width": 1}, {"arrows": "to", "from": "go", "to": "pickett", "width": 1}, {"arrows": "to", "from": "mitchel", "to": "trubiski", "width": 1}, {"arrows": "to", "from": "trubiski", "to": "buffalo", "width": 1}, {"arrows": "to", "from": "buffalo", "to": "bill", "width": 1}, {"arrows": "to", "from": "bill", "to": "mason", "width": 1}, {"arrows": "to", "from": "mason", "to": "rudolph", "width": 1}, {"arrows": "to", "from": "rudolph", "to": "tennesse", "width": 1}, {"arrows": "to", "from": "tennesse", "to": "titan", "width": 1}, {"arrows": "to", "from": "titan", "to": "start", "width": 1}, {"arrows": "to", "from": "suffer", "to": "ankl", "width": 1}, {"arrows": "to", "from": "ankl", "to": "injuri", "width": 1}, {"arrows": "to", "from": "injuri", "to": "american", "width": 1}, {"arrows": "to", "from": "american", "to": "footbal", "width": 1}, {"arrows": "to", "from": "footbal", "to": "alert", "width": 1}, {"arrows": "to", "from": "alert", "to": "bbc", "width": 1}, {"arrows": "to", "from": "bbc", "to": "sport", "width": 1}, {"arrows": "to", "from": "sport", "to": "app", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

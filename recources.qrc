@@ -1,0 +1,13 @@
+<RCC>
+  <qresource>
+    <file>icons/accuracy_graph.jpeg</file>
+    <file>graphs.jpg</file>
+    <file>icons/file select icons.png</file>
+  </qresource>
+  <qresource prefix="newPrefix">
+    <file>icons/name_showmatrix.jpeg</file>
+  </qresource>
+  <qresource prefix="newPrefix">
+    <file>graphs.jpg</file>
+  </qresource>
+</RCC>
