@@ -21,10 +21,11 @@
 - Achieved impressive accuracy and F1 scores in text classification.
 - Demonstrated the effectiveness of graph-based approaches in uncovering hidden patterns and relationships in text data.
 
-## GitHub Repository:https://github.com/SaleemMalik632/GT-Project.git
+## GitHub Repository:
+[GitHub Repository](https://github.com/SaleemMalik632/GT-Project.git)
 
-<!-- ## Working Video:
-[Insert link to working video] -->
+## Working Video:
+[Watch Working Video](./working%20video.mp4)
 
 ## Keywords:
 Graph-Based Text Classification, Data Collection, Graph Construction, Feature Extraction, Classification, KNN Algorithm, Frequent Subgraph Mining, Text Analysis, Collaborative Work, Results.
