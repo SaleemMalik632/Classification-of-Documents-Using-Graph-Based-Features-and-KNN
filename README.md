@@ -1,4 +1,3 @@
-```
 # Classification of Documents Using Graph-Based Features and KNN
 
 ## Project Overview
@@ -31,14 +30,18 @@ This project explores an innovative approach to document classification using gr
 
 * **Data**: Preprocessed data used for the project
 * **Code**: Python scripts for graph construction, feature extraction, and classification
+    * `data_preprocessing.py`: Script for data loading and preprocessing
+    * `graph_construction.py`: Script for constructing graphs from preprocessed text
+    * `feature_extraction.py`: Script for extracting features via common subgraphs
+    * `knn_classification.py`: Script for performing KNN classification
+    * `evaluation.py`: Script for evaluating the classification performance
 * **Report**: Comprehensive report detailing the project and its outcomes
 * **Presentations**: LinkedIn and in-house presentation slides
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
 This project builds on concepts from foundational papers (Paper 1 and Paper 2) on graph-based document classification and the application of maximal common subgraphs (MCS) for graph comparison.
-``` 
